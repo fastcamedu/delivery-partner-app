@@ -1,0 +1,26 @@
+.header-back-icon {
+    width: 80px;
+}
+.header-title {
+    width: auto;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+.header-search-icon {
+    width: 80px;
+}
+.header-left-area {
+    padding-left: 1rem;
+}
+.header-right-area {
+    width: 80px;
+    font-size: 38px;
+}
+.header-left-area {
+    width: 80px;
+}
+
+header {
+    padding: 0 17px;
+}

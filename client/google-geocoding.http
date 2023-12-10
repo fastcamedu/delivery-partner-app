@@ -1,0 +1,6 @@
+### Google API, address
+GET https://maps.googleapis.com/maps/api/geocode/json?address=경기도 남양주시 평내동 148&key={{googleMapKey}}&language=ko
+
+
+### Google API, location
+GET https://maps.googleapis.com/maps/api/geocode/json?latlng=37.6427407,127.2402357&key={{googleMapKey}}&language=ko

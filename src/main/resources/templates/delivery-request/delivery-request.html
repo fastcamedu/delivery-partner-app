@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="/css/common/common.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/delivery-request/delivery-request.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>배달 요청 목록</title>
+</head>
+
+<body>
+  <!-- 상단 헤드 -->
+  <div class="navbar sticky-top navbar-dark bg-white header-padding h-10 pl-2">
+    <div class="header-left-area">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+      </svg>
+    </div>
+
+    <span class="header-title">배달 시작하기</span>
+
+    <div class="header-right-area form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+    </div>
+  </div>
+
+  <!-- 컨텐츠 -->
+  <div id="map">
+  </div>
+
+  <!-- 배달 요청 거절 / 수락 -->
+  <div class="modal fade" id="deliveryRequestModal"
+       data-bs-backdrop="static"
+       data-bs-keyboard="false"
+       tabindex="-1"
+       aria-hidden="true"
+       data-order-id=""
+       data-order-shorten-id=""
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body delivery-confirm-modal-btn-area">
+          <button type="button" class="btn btn-secondary btn-lg delivery-request-reject-btn pr-2" data-bs-dismiss="modal">거절</button>
+          <button type="button" class="btn btn-primary btn-lg delivery-request-accept-btn">수락</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 메장 도착 이벤트 모달 -->
+  <div class="modal fade" id="arrivalAtStoreDeliveryEventModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body delivery-confirm-modal-btn-area">
+          <div class="d-grid gap-2 pl-2 pr-2 pt-2 p-2">
+            <button type="button" class="btn btn-primary btn-lg arrival-at-store-btn">매장 도착</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 픽업 완료 이벤트 모달 -->
+  <div class="modal fade" id="pickupCompleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col"><span class="modal-item-label">주문 번호:</span></div>
+            <div class="col text-end"><span class="pickup-dialog-order-shorten-id">XD34SD8</span></div>
+          </div>
+        </div>
+        <div class="modal-body delivery-confirm-modal-btn-area">
+          <div class="d-grid gap-2 pl-2 pr-2 pt-2 p-2">
+            <button type="button" class="btn btn-primary btn-lg pickup-complete-btn">픽업 완료</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배달 완료 이벤트 모달 -->
+  <div class="modal fade" id="deliveryCompleteEventModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col"><span class="modal-item-label">주문 번호:</span></div>
+            <div class="col text-end"><span class="order-shorten-id"></span></div>
+          </div>
+        </div>
+        <div class="modal-body delivery-confirm-modal-btn-area">
+          <div class="d-grid gap-2 pl-2 pr-2 pt-2 p-2">
+            <button type="button" class="btn btn-primary btn-lg delivery-complete-btn">배달 완료</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배달 완료 확인 -->
+  <div class="modal fade" id="deliveryCompleteConfirmEventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title w-100 text-center" id="exampleModalLabel">배달 완료</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col"><span class="modal-item-label">건당 배달 요청:</span></div>
+            <div class="col text-end"><span class="delivery-complete-delivery-fee modal-item-value"></span></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="button" class="btn btn-secondary delivery-complete-confirm-btn" data-bs-dismiss="modal">확인</button>
+            <button type="button" class="btn btn-primary delivery-continue-btn">다음 배달 하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!-- Cookie Util -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <!-- Google Map -->
+  <script async th:src="${googleMapJsSrcUrl}"></script>
+
+  <!-- Current Page Javascript -->
+  <script src="/js/delivery-request/delivery-request.js"></script>
+</body>
+</html>

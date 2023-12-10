@@ -1,0 +1,9 @@
+server:
+  port: 30000
+  role-name: "delivery-partner-app"
+
+apis:
+  delivery-partner-api:
+    host: "http://localhost:30001/apis"
+    login: "/auth"
+    signup: "/signup"
